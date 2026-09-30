@@ -295,10 +295,9 @@ mod tests {
         // X coordinate of sender_wif * recipient_pub, checked independently by
         // scaling the recipient point (see upstream srbde/hive-xylem#9).
         let priv_bytes = decode_wif(sender_wif()).unwrap();
-        let secp = Secp256k1::new();
         let sender_priv = SecretKey::from_slice(&priv_bytes).unwrap();
-        let (recipient_pub, _) = parse_public_key(recipient_pub()).unwrap();
-        let shared_point = secp256k1::ecdh::shared_secret_point(&recipient_pub, &sender_priv);
+        let (recipient, _) = parse_public_key(recipient_pub()).unwrap();
+        let shared_point = secp256k1::ecdh::shared_secret_point(&recipient, &sender_priv);
         assert_eq!(shared_point.len(), 64);
         assert_eq!(
             hex::encode(shared_secret_x(&shared_point)),
